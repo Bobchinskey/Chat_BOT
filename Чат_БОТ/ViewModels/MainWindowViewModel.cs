@@ -9,6 +9,7 @@ namespace Чат_БОТ.ViewModels
 {
     internal class MainWindowViewModel : ViewModelBase
     {
+
         #region Имя Бота : NameBot
 
         private string _NameBot = "Чат бот";
@@ -21,5 +22,7 @@ namespace Чат_БОТ.ViewModels
         }
 
         #endregion
+
+
     }
 }

@@ -37,7 +37,7 @@
             </Ellipse>
         </Grid>
         <Grid Grid.Row="2"  Background="AliceBlue">
-            <TextBox Margin="0,10"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="280" Height="25" FontSize="16" TextWrapping="Wrap"/>
+            <TextBox Margin="0,10"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="280" Height="40" FontSize="16" TextWrapping="Wrap"/>
         </Grid>
     </Grid>
 </Window>
