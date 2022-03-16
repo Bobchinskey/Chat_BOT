@@ -1,24 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Data;
 using System.Windows.Input;
 using Чат_БОТ.ViewModels.Base;
 using Чат_БОТ.Commands;
-using System.Data.SqlClient;
-using System.Configuration;
-using Чат_БОТ.Models;
-using System.Windows;
 
 namespace Чат_БОТ.ViewModels
 {
     internal class MainWindowViewModel : ViewModelBase
     {
+        #region Таблицы сообщений : DataTable
+
         private DataTable _table2;
 
-        /// <summary>NameBot</summary>
+        /// <summary>Table</summary>
         public DataTable table2
         {
             get => _table2;
@@ -28,7 +21,8 @@ namespace Чат_БОТ.ViewModels
         public DataTable table = new DataTable("MessengeTable");
         DataColumn column;
         DataRow row;
-        
+
+        #endregion
 
         #region Имя Бота : NameBot
 
@@ -43,7 +37,6 @@ namespace Чат_БОТ.ViewModels
 
         #endregion
     
-
         /*------------------------------------------------------------------------------------------------*/
 
         #region Команды
@@ -57,15 +50,33 @@ namespace Чат_БОТ.ViewModels
         private void OnSendTaskExecuted(object p)
         {
             row = table.NewRow();
-            row["Messange"] = "Привет солнышко)";
+            row["Messange"] = "Привет";
             row["Access"] = true;
             table.Rows.Add(row);
+
+            row = table.NewRow();
+            row["Messange"] = "Привет солнышко)";
+            row["Access"] = false;
+            table.Rows.Add(row);
+
+            row = table.NewRow();
+            row["Messange"] = "Как у тебя дела?";
+            row["Access"] = true;
+            table.Rows.Add(row);
+
+            row = table.NewRow();
+            row["Messange"] = "Все супер, я же бот. А как у тебя дела?";
+            row["Access"] = false;
+            table.Rows.Add(row);
+
             table2 = table;
         }
 
         #endregion
 
         #endregion
+
+        /*------------------------------------------------------------------------------------------------*/
         public MainWindowViewModel()
         {
             #region Команды
@@ -74,13 +85,13 @@ namespace Чат_БОТ.ViewModels
 
             #endregion
 
+            #region Создание колонок таблицы table
 
             column = new DataColumn();
             column.DataType = System.Type.GetType("System.String");
             column.ColumnName = "Messange";
             column.ReadOnly = true;
             column.Unique = false;
-            // Add the Column to the DataColumnCollection.
             table.Columns.Add(column);
             
             column = new DataColumn();
@@ -88,8 +99,9 @@ namespace Чат_БОТ.ViewModels
             column.ColumnName = "Access";
             column.ReadOnly = true;
             column.Unique = false;
-            // Add the Column to the DataColumnCollection.
             table.Columns.Add(column);
+
+            #endregion
         }
     }
 }

@@ -75,7 +75,10 @@
         </Grid>
         <Grid Grid.Row="2"  Background="AliceBlue">
             <TextBox Style="{StaticResource TextBoxStyle}" Margin="0,10"  VerticalAlignment="Center" HorizontalAlignment="Center" Width="280"  FontSize="14" TextWrapping="Wrap"/>
-            <Button BorderBrush="AliceBlue" Background="AliceBlue" Command="{Binding SendTask}" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="30" Height="20" Margin="10,20">
+            <Button Command="{Binding SendTask}"  BorderBrush="AliceBlue" Background="AliceBlue" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="30" Height="20" Margin="10,20">
+                <Button.InputBindings>
+                    <KeyBinding Command="{Binding SendTask}" Key="Return" />
+                </Button.InputBindings>
                 <iw:ImageAwesome Icon="Send" HorizontalAlignment="Center" 
                                  Height="15"
                                  Foreground="CornflowerBlue"/>
