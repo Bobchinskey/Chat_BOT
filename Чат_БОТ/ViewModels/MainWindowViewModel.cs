@@ -2,11 +2,17 @@
 using System.Windows.Input;
 using Чат_БОТ.ViewModels.Base;
 using Чат_БОТ.Commands;
+using System.Windows;
+using System.Configuration;
+using System.Data.SqlClient;
 
 namespace Чат_БОТ.ViewModels
 {
     internal class MainWindowViewModel : ViewModelBase
     {
+
+        public string Message;
+
         #region Таблицы сообщений : DataTable
 
         private DataTable _table2;
@@ -36,7 +42,21 @@ namespace Чат_БОТ.ViewModels
         }
 
         #endregion
-    
+
+        #region Сообщение пользователя : UserMessage
+
+        private string _UserMessage;
+
+        /// <summary>NameBot</summary>
+        public string UserMessage
+        {
+            get => _UserMessage;
+            set => Set(ref _UserMessage, value);
+        }
+
+        #endregion
+
+
         /*------------------------------------------------------------------------------------------------*/
 
         #region Команды
@@ -49,27 +69,66 @@ namespace Чат_БОТ.ViewModels
 
         private void OnSendTaskExecuted(object p)
         {
-            row = table.NewRow();
-            row["Messange"] = "Привет";
-            row["Access"] = true;
-            table.Rows.Add(row);
+            if (UserMessage == null)
+            {
+                MessageBox.Show("Введите сообщение");   
+            }
+            else
+            {
+                if (UserMessage == "")
+                {
+                    row = table.NewRow();
+                    row["Messange"] = UserMessage;
+                    row["Access"] = true;
+                    table.Rows.Add(row);
 
-            row = table.NewRow();
-            row["Messange"] = "Привет солнышко)";
-            row["Access"] = false;
-            table.Rows.Add(row);
+                    row = table.NewRow();
+                    row["Messange"] = "Пустое сообщение? Мило)";
+                    row["Access"] = false;
+                    table.Rows.Add(row);
 
-            row = table.NewRow();
-            row["Messange"] = "Как у тебя дела?";
-            row["Access"] = true;
-            table.Rows.Add(row);
+                    table2 = table;
+                }
+                else 
+                { 
+                    row = table.NewRow();
+                    row["Messange"] = UserMessage;
+                    row["Access"] = true;
+                    table.Rows.Add(row);
 
-            row = table.NewRow();
-            row["Messange"] = "Все супер, я же бот. А как у тебя дела?";
-            row["Access"] = false;
-            table.Rows.Add(row);
+                    string connectionString = ConfigurationManager.ConnectionStrings["Chat_Bot"].ConnectionString;
+                    SqlConnection ThisConnection = new SqlConnection(connectionString);
+                    ThisConnection.Open();
+                    SqlCommand thisCommand = ThisConnection.CreateCommand();
+                    thisCommand.CommandText = "select [Answer] from [Message] where Lower([message]) like '%"+ UserMessage + "%'";
+                    SqlDataReader thisReader = thisCommand.ExecuteReader();
+                    thisReader.Read();
+                    if (thisReader.HasRows)
+                    {
+                        Message = thisReader["Answer"].ToString();
 
-            table2 = table;
+                        row = table.NewRow();
+                        row["Messange"] = Message;
+                        row["Access"] = false;
+                        table.Rows.Add(row);
+
+                        UserMessage = "";
+                    }
+                    else
+                    {
+                        row = table.NewRow();
+                        row["Messange"] = "К сожалению мой функционал ограничен, приношу свои извинения.";
+                        row["Access"] = false;
+                        table.Rows.Add(row);
+
+                        UserMessage = "";
+                    }
+                    thisReader.Close();
+                    ThisConnection.Close();
+
+                    table2 = table;
+                }
+            }
         }
 
         #endregion
